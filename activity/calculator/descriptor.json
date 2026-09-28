@@ -1,0 +1,35 @@
+{
+  "name": "flogo-calculator",
+  "type": "flogo:activity",
+  "version": "0.10.0",
+  "title": "Calculator Activity",
+  "description": "Arithmetic operations on two values",
+  "homepage": "https://github.com/evgen260392/flogo-lib/tree/master/activity/calculator",
+  "settings":[
+    {
+      "name": "Value A",
+      "type": "int",
+      "required": true,
+      "description": "First operand"
+    },
+    {
+      "name": "Value B",
+      "type": "int",
+      "required": true,
+      "description": "Second operand"
+    },
+    {
+      "name": "op",
+      "type": "string",
+      "allowed": ["Sum", "Sub", "Mul", "Div"],
+      "description": "Arithmetic operation"
+    }
+  ],
+  "output": [
+    {
+      "name": "value",
+      "type": "int",
+      "description": "Result of the arithmetic operation"
+    }
+  ]
+}
