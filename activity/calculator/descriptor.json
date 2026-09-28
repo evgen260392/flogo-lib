@@ -7,14 +7,8 @@
   "homepage": "https://github.com/evgen260392/flogo-lib/tree/master/activity/calculator",
   "settings":[
     {
-      "name": "Value A",
-      "type": "int",
-      "required": true,
-      "description": "First operand"
-    },
-    {
       "name": "Value B",
-      "type": "int",
+      "type": "any",
       "required": true,
       "description": "Second operand"
     },
@@ -25,10 +19,18 @@
       "description": "Arithmetic operation"
     }
   ],
+  "input": [
+    {
+      "name": "valueA",
+      "type": "any",
+      "required": true,
+      "description": "First operand from the flow"
+    }
+  ],
   "output": [
     {
       "name": "value",
-      "type": "int",
+      "type": "any",
       "description": "Result of the arithmetic operation"
     }
   ]

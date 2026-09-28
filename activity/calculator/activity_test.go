@@ -19,7 +19,7 @@ func TestRegister(t *testing.T) {
 }
 
 func TestNew(t *testing.T) {
-	settings := &Settings{ValueA: 8, ValueB: 2, Op: "Div"}
+	settings := &Settings{ValueB: 2, Op: "Div"}
 	mf := mapper.NewFactory(resolve.GetBasicResolver())
 	iCtx := test.NewActivityInitContext(settings, mf)
 
@@ -33,19 +33,19 @@ func TestEvalArithmeticOperations(t *testing.T) {
 	tests := []struct {
 		name string
 		op   string
-		a    int32
-		b    int32
-		want int32
+		a    interface{}
+		b    interface{}
+		want float64
 	}{
-		{name: "sum", op: "Sum", a: 9, b: 3, want: 12},
-		{name: "subtract", op: "Sub", a: 9, b: 3, want: 6},
-		{name: "multiply", op: "Mul", a: 9, b: 3, want: 27},
-		{name: "divide", op: "Div", a: 9, b: 3, want: 3},
+		{name: "sum int", op: "Sum", a: int8(9), b: int64(3), want: 12},
+		{name: "subtract float", op: "Sub", a: float32(9.5), b: float64(3.25), want: 6.25},
+		{name: "multiply unsigned", op: "Mul", a: uint16(9), b: uint(3), want: 27},
+		{name: "divide fractional", op: "Div", a: int(9), b: float32(2), want: 4.5},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			settings := &Settings{ValueA: tt.a, ValueB: tt.b, Op: tt.op}
+			settings := &Settings{ValueB: tt.b, Op: tt.op}
 			mf := mapper.NewFactory(resolve.GetBasicResolver())
 			iCtx := test.NewActivityInitContext(settings, mf)
 			act, err := New(iCtx)
@@ -54,6 +54,7 @@ func TestEvalArithmeticOperations(t *testing.T) {
 			}
 
 			tc := test.NewActivityContext(act.Metadata())
+			tc.SetInput(ivValueA, tt.a)
 			done, err := act.Eval(tc)
 			if err != nil {
 				t.Fatalf("evaluating activity: %v", err)
@@ -63,4 +64,34 @@ func TestEvalArithmeticOperations(t *testing.T) {
 			assert.Equal(t, tt.want, tc.GetOutput(ovValue))
 		})
 	}
+}
+
+func TestEvalRejectsNonNumericInput(t *testing.T) {
+	settings := &Settings{ValueB: 2, Op: "Sum"}
+	mf := mapper.NewFactory(resolve.GetBasicResolver())
+	iCtx := test.NewActivityInitContext(settings, mf)
+	act, err := New(iCtx)
+	if err != nil {
+		t.Fatalf("creating activity: %v", err)
+	}
+
+	tc := test.NewActivityContext(act.Metadata())
+	tc.SetInput(ivValueA, "not a number")
+	_, err = act.Eval(tc)
+	assert.Error(t, err)
+}
+
+func TestEvalRejectsDivisionByZero(t *testing.T) {
+	settings := &Settings{ValueB: 0, Op: "Div"}
+	mf := mapper.NewFactory(resolve.GetBasicResolver())
+	iCtx := test.NewActivityInitContext(settings, mf)
+	act, err := New(iCtx)
+	if err != nil {
+		t.Fatalf("creating activity: %v", err)
+	}
+
+	tc := test.NewActivityContext(act.Metadata())
+	tc.SetInput(ivValueA, 9)
+	_, err = act.Eval(tc)
+	assert.Error(t, err)
 }

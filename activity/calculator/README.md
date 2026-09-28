@@ -13,9 +13,13 @@ flogo install github.com/evgen260392/flogo-lib/activity/calculator
 ### Settings:
 | Name     | Type   | Description |
 |:---------|:-------|:------------|
-| Value A  | int32  | First operand - **REQUIRED** |
-| Value B  | int32  | Second operand - **REQUIRED** |
+| Value B  | any    | Second operand; any numeric type - **REQUIRED** |
 | op       | string | Operation: `Sum`, `Sub`, `Mul`, or `Div` |
+
+### Input:
+| Name   | Type | Description |
+|:-------|:-----|:------------|
+| valueA | any  | First operand from the flow; any numeric type - **REQUIRED** |
 
 ### Output:
 | Name  | Type | Description |
@@ -34,9 +38,11 @@ Add two values:
   "activity": {
     "ref": "github.com/evgen260392/flogo-lib/activity/calculator",
     "settings": {
-      "Value A": 8,
       "Value B": 2,
       "op": "Sum"
+    },
+    "input": {
+      "valueA": "=$flow.value"
     }
   }
 }
