@@ -1,0 +1,63 @@
+{
+  "name": "flogo-opcua-client",
+  "type": "flogo:activity",
+  "version": "0.10.0",
+  "title": "OPC UA Client Activity",
+  "description": "Reads a node value from an OPC UA server",
+  "homepage": "https://github.com/evgen260392/flogo-lib/tree/main/activity/opcuaclient",
+  "settings": [
+    {
+      "name": "endpoint",
+      "type": "string",
+      "required": true,
+      "description": "OPC UA endpoint URL, for example opc.tcp://localhost:4840"
+    },
+    {
+      "name": "nodeID",
+      "type": "string",
+      "required": true,
+      "description": "Node ID to read, for example ns=2;s=Temperature"
+    },
+    {
+      "name": "securityPolicy",
+      "type": "string",
+      "default": "None",
+      "description": "OPC UA security policy name"
+    },
+    {
+      "name": "securityMode",
+      "type": "string",
+      "allowed": ["None", "Sign", "SignAndEncrypt"],
+      "default": "None",
+      "description": "OPC UA message security mode"
+    },
+    {
+      "name": "username",
+      "type": "string",
+      "description": "Optional username for user-token authentication"
+    },
+    {
+      "name": "password",
+      "type": "string",
+      "description": "Optional password for user-token authentication"
+    },
+    {
+      "name": "userTokenPolicyID",
+      "type": "string",
+      "description": "Optional user-token policy ID configured by the server"
+    },
+    {
+      "name": "timeout",
+      "type": "integer",
+      "default": 10,
+      "description": "Connection and request timeout in seconds"
+    }
+  ],
+  "output": [
+    {
+      "name": "value",
+      "type": "any",
+      "description": "Value read from the OPC UA node"
+    }
+  ]
+}
