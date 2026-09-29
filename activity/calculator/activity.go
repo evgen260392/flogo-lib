@@ -22,8 +22,26 @@ type Input struct {
 	ValueA interface{} `md:"valueA,required"`
 }
 
+func (i *Input) ToMap() map[string]interface{} {
+	return map[string]interface{}{ivValueA: i.ValueA}
+}
+
+func (i *Input) FromMap(values map[string]interface{}) error {
+	i.ValueA = values[ivValueA]
+	return nil
+}
+
 type Output struct {
 	Value interface{} `md:"value"`
+}
+
+func (o *Output) ToMap() map[string]interface{} {
+	return map[string]interface{}{ovValue: o.Value}
+}
+
+func (o *Output) FromMap(values map[string]interface{}) error {
+	o.Value = values[ovValue]
+	return nil
 }
 
 func init() {
@@ -52,10 +70,15 @@ func (a *Activity) Metadata() *activity.Metadata {
 }
 
 // Eval implements activity.Activity.Eval
-func (a *Activity) Eval(context activity.Context) (done bool, err error) {
+func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	s := a.settings
+	input := &Input{}
 
-	valueA, err := toFloat64(context.GetInput(ivValueA))
+	err = ctx.GetInputObject(input)
+	if err != nil {
+		return false, fmt.Errorf("input %q: %w", ivValueA, err)
+	}
+	valueA, err := toFloat64(input.ValueA)
 	if err != nil {
 		return false, fmt.Errorf("input %q: %w", ivValueA, err)
 	}
@@ -82,7 +105,7 @@ func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 		return false, fmt.Errorf("unsupported operation %q", s.Op)
 	}
 
-	err = context.SetOutput(ovValue, val)
+	err = ctx.SetOutputObject(&Output{Value: val})
 	if err != nil {
 		return false, err
 	}
