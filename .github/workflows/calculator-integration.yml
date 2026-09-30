@@ -1,0 +1,29 @@
+name: Calculator integration
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        core: [v1.1.0, v1.2.0, v1.6.24]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+
+      - name: Select Flogo core version
+        working-directory: tests/calculator
+        run: go mod edit -require=github.com/project-flogo/core@${{ matrix.core }}
+
+      - name: Run integration tests
+        working-directory: tests/calculator
+        run: go test -mod=mod ./...
