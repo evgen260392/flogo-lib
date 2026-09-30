@@ -19,7 +19,7 @@ func TestRegister(t *testing.T) {
 }
 
 func TestNew(t *testing.T) {
-	settings := &Settings{ValueB: 2, Op: "Div"}
+	settings := &Settings{OperandB: 2, Operator: "Div"}
 	mf := mapper.NewFactory(resolve.GetBasicResolver())
 	iCtx := test.NewActivityInitContext(settings, mf)
 
@@ -31,21 +31,21 @@ func TestNew(t *testing.T) {
 
 func TestEvalArithmeticOperations(t *testing.T) {
 	tests := []struct {
-		name string
-		op   string
-		a    interface{}
-		b    interface{}
-		want float64
+		name     string
+		operator string
+		operandA interface{}
+		operandB interface{}
+		want     float64
 	}{
-		{name: "sum int", op: "Sum", a: int8(9), b: int64(3), want: 12},
-		{name: "subtract float", op: "Sub", a: float32(9.5), b: float64(3.25), want: 6.25},
-		{name: "multiply unsigned", op: "Mul", a: uint16(9), b: uint(3), want: 27},
-		{name: "divide fractional", op: "Div", a: int(9), b: float32(2), want: 4.5},
+		{name: "add int", operator: "Add", operandA: int8(9), operandB: int64(3), want: 12},
+		{name: "subtract float", operator: "Sub", operandA: float32(9.5), operandB: float64(3.25), want: 6.25},
+		{name: "multiply unsigned", operator: "Mul", operandA: uint16(9), operandB: uint(3), want: 27},
+		{name: "divide fractional", operator: "Div", operandA: int(9), operandB: float32(2), want: 4.5},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			settings := &Settings{ValueB: tt.b, Op: tt.op}
+			settings := &Settings{OperandB: tt.operandB, Operator: tt.operator}
 			mf := mapper.NewFactory(resolve.GetBasicResolver())
 			iCtx := test.NewActivityInitContext(settings, mf)
 			act, err := New(iCtx)
@@ -54,20 +54,20 @@ func TestEvalArithmeticOperations(t *testing.T) {
 			}
 
 			tc := test.NewActivityContext(act.Metadata())
-			tc.SetInput(ivValueA, tt.a)
+			tc.SetInput(ivOperandA, tt.operandA)
 			done, err := act.Eval(tc)
 			if err != nil {
 				t.Fatalf("evaluating activity: %v", err)
 			}
 
 			assert.True(t, done)
-			assert.Equal(t, tt.want, tc.GetOutput(ovValue))
+			assert.Equal(t, tt.want, tc.GetOutput(ovResult))
 		})
 	}
 }
 
 func TestEvalRejectsNonNumericInput(t *testing.T) {
-	settings := &Settings{ValueB: 2, Op: "Sum"}
+	settings := &Settings{OperandB: 2, Operator: "Add"}
 	mf := mapper.NewFactory(resolve.GetBasicResolver())
 	iCtx := test.NewActivityInitContext(settings, mf)
 	act, err := New(iCtx)
@@ -76,13 +76,13 @@ func TestEvalRejectsNonNumericInput(t *testing.T) {
 	}
 
 	tc := test.NewActivityContext(act.Metadata())
-	tc.SetInput(ivValueA, "not a number")
+	tc.SetInput(ivOperandA, "not a number")
 	_, err = act.Eval(tc)
 	assert.Error(t, err)
 }
 
 func TestEvalRejectsDivisionByZero(t *testing.T) {
-	settings := &Settings{ValueB: 0, Op: "Div"}
+	settings := &Settings{OperandB: 0, Operator: "Div"}
 	mf := mapper.NewFactory(resolve.GetBasicResolver())
 	iCtx := test.NewActivityInitContext(settings, mf)
 	act, err := New(iCtx)
@@ -91,7 +91,7 @@ func TestEvalRejectsDivisionByZero(t *testing.T) {
 	}
 
 	tc := test.NewActivityContext(act.Metadata())
-	tc.SetInput(ivValueA, 9)
+	tc.SetInput(ivOperandA, 9)
 	_, err = act.Eval(tc)
 	assert.Error(t, err)
 }

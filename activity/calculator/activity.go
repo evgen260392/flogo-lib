@@ -8,42 +8,6 @@ import (
 	"github.com/project-flogo/core/data/metadata"
 )
 
-const (
-	ivValueA = "valueA"
-	ovValue  = "value"
-)
-
-type Settings struct {
-	ValueB interface{} `md:"Value B,required"`
-	Op     string      `md:"op,allowed(Sum,Sub,Mul,Div)"`
-}
-
-type Input struct {
-	ValueA interface{} `md:"valueA,required"`
-}
-
-func (i *Input) ToMap() map[string]interface{} {
-	return map[string]interface{}{ivValueA: i.ValueA}
-}
-
-func (i *Input) FromMap(values map[string]interface{}) error {
-	i.ValueA = values[ivValueA]
-	return nil
-}
-
-type Output struct {
-	Value interface{} `md:"value"`
-}
-
-func (o *Output) ToMap() map[string]interface{} {
-	return map[string]interface{}{ovValue: o.Value}
-}
-
-func (o *Output) FromMap(values map[string]interface{}) error {
-	o.Value = values[ovValue]
-	return nil
-}
-
 func init() {
 	_ = activity.Register(&Activity{}, New)
 }
@@ -76,36 +40,36 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	err = ctx.GetInputObject(input)
 	if err != nil {
-		return false, fmt.Errorf("input %q: %w", ivValueA, err)
+		return false, fmt.Errorf("input %q: %w", ivOperandA, err)
 	}
-	valueA, err := toFloat64(input.ValueA)
+	operandA, err := toFloat64(input.OperandA)
 	if err != nil {
-		return false, fmt.Errorf("input %q: %w", ivValueA, err)
+		return false, fmt.Errorf("input %q: %w", ivOperandA, err)
 	}
-	valueB, err := toFloat64(s.ValueB)
+	operandB, err := toFloat64(s.OperandB)
 	if err != nil {
-		return false, fmt.Errorf("setting %q: %w", "Value B", err)
+		return false, fmt.Errorf("setting %q: %w", "Operand B", err)
 	}
 
-	var val float64
+	var result float64
 
-	switch s.Op {
-	case "Sum":
-		val = valueA + valueB
+	switch s.Operator {
+	case "Add":
+		result = operandA + operandB
 	case "Sub":
-		val = valueA - valueB
+		result = operandA - operandB
 	case "Mul":
-		val = valueA * valueB
+		result = operandA * operandB
 	case "Div":
-		if valueB == 0 {
+		if operandB == 0 {
 			return false, fmt.Errorf("cannot divide by zero")
 		}
-		val = valueA / valueB
+		result = operandA / operandB
 	default:
-		return false, fmt.Errorf("unsupported operation %q", s.Op)
+		return false, fmt.Errorf("unsupported operation %q", s.Operator)
 	}
 
-	err = ctx.SetOutputObject(&Output{Value: val})
+	err = ctx.SetOutputObject(&Output{Result: result})
 	if err != nil {
 		return false, err
 	}

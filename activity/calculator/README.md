@@ -13,39 +13,39 @@ flogo install github.com/evgen260392/flogo-lib/activity/calculator
 ### Settings:
 | Name     | Type   | Description |
 |:---------|:-------|:------------|
-| Value B  | any    | Second operand; any numeric type - **REQUIRED** |
-| op       | string | Operation: `Sum`, `Sub`, `Mul`, or `Div` |
+| Operand B | any    | Second operand; any numeric type - **REQUIRED** |
+| operator  | string | Operation: `Add`, `Sub`, `Mul`, or `Div` |
 
 ### Input:
 | Name   | Type | Description |
 |:-------|:-----|:------------|
-| valueA | any  | First operand from the flow; any numeric type - **REQUIRED** |
+| operandA | any  | First operand from the flow; any numeric type - **REQUIRED** |
 
 ### Output:
 | Name  | Type | Description |
 |:------|:-----|:------------|
-| value | int  | Result of the arithmetic operation |
+| result | int  | Result of the arithmetic operation |
 
 ## Examples
 
-### Sum
+### Add
 Add two values:
 
 ```json
 {
   "id": "sum_values",
-  "name": "Sum Values",
+  "name": "Add Values",
   "activity": {
     "ref": "github.com/evgen260392/flogo-lib/activity/calculator",
     "settings": {
-      "Value B": 2,
-      "op": "Sum"
+      "Operand B": 2,
+      "operator": "Add"
     },
     "input": {
-      "valueA": "=$flow.value"
+      "operandA": "=$flow.value"
     }
   }
 }
 ```
 
-Supported operation values are `Sum`, `Sub`, `Mul`, and `Div`.
+Supported operation values are `Add`, `Sub`, `Mul`, and `Div`.

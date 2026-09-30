@@ -10,17 +10,17 @@ import (
 
 func TestActivityExecutionThroughFlogoAPI(t *testing.T) {
 	act, err := api.NewActivity(&calculator.Activity{}, &calculator.Settings{
-		ValueB: 3,
-		Op:     "Sum",
+		OperandB: 3,
+		Operator: "Add",
 	})
 	if err != nil {
 		t.Fatalf("creating activity through Flogo API: %v", err)
 	}
 
-	output, err := api.EvalActivity(act, &calculator.Input{ValueA: 9})
+	output, err := api.EvalActivity(act, &calculator.Input{OperandA: 9})
 	if err != nil {
 		t.Fatalf("evaluating activity through Flogo API: %v", err)
 	}
 
-	assert.Equal(t, float64(12), output["value"])
+	assert.Equal(t, float64(12), output["result"])
 }
