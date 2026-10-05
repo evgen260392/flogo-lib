@@ -1,0 +1,22 @@
+# Modbus Master
+
+This activity reads coils, discrete inputs, holding registers, or input registers over Modbus TCP.
+
+## Inputs
+
+| Name | Type | Description |
+|:-----|:-----|:------------|
+| ip | string | Server IP address or host name |
+| port | integer | Server TCP port |
+| slaveAddress | integer | Modbus unit ID from 1 to 247 |
+| registerAddress | integer | Starting coil or register address |
+| length | integer | Number of values to read |
+| function | string | `ReadCoils`, `ReadDiscreteInputs`, `ReadHoldingRegisters`, or `ReadInputRegisters` |
+
+The maximum length is 2000 for coil/discrete-input reads and 125 for register reads. Bit reads return `[]bool`; register reads return `[]uint16` in network byte order.
+
+## Output
+
+| Name | Type | Description |
+|:-----|:-----|:------------|
+| value | any | The decoded values returned by the selected function |

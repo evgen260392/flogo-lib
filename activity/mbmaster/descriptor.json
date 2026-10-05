@@ -1,0 +1,25 @@
+{
+  "name": "flogo-mbmaster",
+  "type": "flogo:activity",
+  "version": "0.10.0",
+  "title": "Modbus Master Activity",
+  "description": "Reads coils, discrete inputs, holding registers, or input registers over Modbus TCP",
+  "homepage": "https://github.com/evgen260392/flogo-lib/tree/master/activity/mbmaster",
+  "input": [
+    { "name": "ip", "type": "string", "required": true, "description": "Modbus TCP server IP address or host name" },
+    { "name": "port", "type": "integer", "required": true, "description": "Modbus TCP server port" },
+    { "name": "slaveAddress", "type": "integer", "required": true, "description": "Modbus slave/unit ID (1-247)" },
+    { "name": "registerAddress", "type": "integer", "required": true, "description": "Starting coil or register address" },
+    { "name": "length", "type": "integer", "required": true, "description": "Number of coils or registers to read" },
+    {
+      "name": "function",
+      "type": "string",
+      "required": true,
+      "allowed": ["ReadCoils", "ReadDiscreteInputs", "ReadHoldingRegisters", "ReadInputRegisters"],
+      "description": "Modbus read function"
+    }
+  ],
+  "output": [
+    { "name": "value", "type": "any", "description": "Boolean values for bit functions or unsigned 16-bit values for register functions" }
+  ]
+}
