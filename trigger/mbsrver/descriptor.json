@@ -1,0 +1,35 @@
+{
+  "name": "flogo-mbsrver",
+  "type": "flogo:trigger",
+  "version": "0.10.0",
+  "title": "Modbus TCP Server Trigger",
+  "description": "Hosts a local Modbus TCP server and emits changed register values",
+  "homepage": "https://github.com/evgen260392/flogo-lib/tree/master/trigger/mbsrver",
+  "settings": [
+    {
+      "name": "port",
+      "type": "integer",
+      "required": true,
+      "description": "Local TCP port for the Modbus server"
+    },
+    {
+      "name": "slaveId",
+      "type": "integer",
+      "required": true,
+      "description": "Modbus Unit ID (1-247)"
+    },
+    {
+      "name": "registers",
+      "type": "array",
+      "required": true,
+      "description": "JSON register definitions with name, address, type, mb-function, and initial data"
+    }
+  ],
+  "output": [
+    {
+      "name": "data",
+      "type": "any",
+      "description": "The changed register: name, address, type, mb-function, and data"
+    }
+  ]
+}
