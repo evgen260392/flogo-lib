@@ -1,0 +1,51 @@
+{
+  "name": "flogo-mbpoller",
+  "type": "flogo:trigger",
+  "version": "0.10.0",
+  "title": "Modbus TCP Poller Trigger",
+  "description": "Periodically reads holding registers from configured Modbus TCP slaves",
+  "homepage": "https://github.com/evgen260392/flogo-lib/tree/master/trigger/mbpoller",
+  "settings": [
+    {
+      "name": "host",
+      "type": "string",
+      "required": true,
+      "description": "Modbus TCP server IP address or host name"
+    },
+    {
+      "name": "port",
+      "type": "integer",
+      "required": true,
+      "description": "Modbus TCP server port"
+    },
+    {
+      "name": "interval",
+      "type": "integer",
+      "required": true,
+      "description": "Polling interval in milliseconds"
+    }
+  ],
+  "handler": {
+    "settings": [
+      {
+        "name": "slaveAddress",
+        "type": "integer",
+        "required": true,
+        "description": "Modbus unit ID (1-247)"
+      },
+      {
+        "name": "registers",
+        "type": "object",
+        "required": true,
+        "description": "Map of register names to holding-register addresses"
+      }
+    ]
+  },
+  "output": [
+    {
+      "name": "data",
+      "type": "array",
+      "description": "Array of {name, address, value} objects for this slave"
+    }
+  ]
+}
