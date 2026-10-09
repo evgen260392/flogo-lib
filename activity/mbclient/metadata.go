@@ -1,4 +1,4 @@
-package mbmaster
+package mbclient
 
 const (
 	ivIP              = "ip"

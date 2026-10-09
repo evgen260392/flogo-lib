@@ -1,4 +1,4 @@
-module github.com/evgen260392/flogo-lib/activity/mbmaster
+module github.com/evgen260392/flogo-lib/activity/mbclient
 
 require (
 	github.com/goburrow/modbus v0.1.0

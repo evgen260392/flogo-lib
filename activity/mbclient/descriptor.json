@@ -1,10 +1,10 @@
 {
-  "name": "flogo-mbmaster",
+  "name": "flogo-mbclient",
   "type": "flogo:activity",
   "version": "0.10.0",
-  "title": "Modbus Master Activity",
+  "title": "Modbus Client Activity",
   "description": "Reads coils, discrete inputs, holding registers, or input registers over Modbus TCP",
-  "homepage": "https://github.com/evgen260392/flogo-lib/tree/master/activity/mbmaster",
+  "homepage": "https://github.com/evgen260392/flogo-lib/tree/master/activity/mbclient",
   "input": [
     { "name": "ip", "type": "string", "required": true, "description": "Modbus TCP server IP address or host name" },
     { "name": "port", "type": "integer", "required": true, "description": "Modbus TCP server port" },

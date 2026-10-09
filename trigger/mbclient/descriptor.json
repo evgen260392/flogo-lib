@@ -1,0 +1,15 @@
+{
+  "name": "flogo-mbclient-trigger",
+  "type": "flogo:trigger",
+  "version": "0.10.0",
+  "title": "Modbus Client Completion Trigger",
+  "description": "Emits an event when a Modbus request from the Modbus Client activity completes",
+  "homepage": "https://github.com/evgen260392/flogo-lib/tree/master/trigger/mbclient",
+  "settings": [],
+  "output": [
+    { "name": "activityName", "type": "string", "description": "Name of the activity that completed the request" },
+    { "name": "request", "type": "object", "description": "Input values used for the Modbus request" },
+    { "name": "value", "type": "any", "description": "Decoded Modbus response, when the request succeeds" },
+    { "name": "error", "type": "string", "description": "Error message, when the Modbus request fails" }
+  ]
+}
